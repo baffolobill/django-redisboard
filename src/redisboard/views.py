@@ -15,7 +15,6 @@ try:
     from django.utils.datastructures import SortedDict as OrderedDict
 except ImportError:
     from django.utils.datastructures import OrderedDict
-    
 
 
 logger = getLogger(__name__)
@@ -90,10 +89,25 @@ def _get_key_info(conn, key):
             'idletime': "n/a",
         }
 
+
+def _smart_convertor(value):
+    if isinstance(value, bytes):
+        from django.core.cache import cache
+        # I use only django_redis backend. All caches have
+        # the same settings. So that I can skip any kind of 
+        # validation.
+        if hasattr(cache, '_serializer'):
+            try:
+                return cache._serializer.loads(value)
+            except:
+                pass
+    return smart_text(value)
+
+
 VALUE_GETTERS = {
     b'list': lambda conn, key, start=0, end=-1: [(pos + start, val)
                                                  for (pos, val) in enumerate(conn.lrange(key, start, end))],
-    b'string': lambda conn, key, *args: [('string', smart_text(conn.get(key)))],
+    b'string': lambda conn, key, *args: [('string', _smart_convertor(conn.get(key)))],
     b'set': lambda conn, key, *args: list(enumerate(conn.smembers(key))),
     b'zset': lambda conn, key, start=0, end=-1: [(pos + start, val)
                                                  for (pos, val) in enumerate(conn.zrange(key, start, end))],
