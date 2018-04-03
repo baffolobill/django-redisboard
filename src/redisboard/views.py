@@ -96,9 +96,9 @@ def _smart_convertor(value):
         # I use only django_redis backend. All caches have
         # the same settings. So that I can skip any kind of 
         # validation.
-        if hasattr(cache, '_serializer'):
+        if hasattr(cache, 'client') and hasattr(cache.client, '_serializer'):
             try:
-                return cache._serializer.loads(value)
+                return cache.client._serializer.loads(value)
             except:
                 pass
     return smart_text(value)
