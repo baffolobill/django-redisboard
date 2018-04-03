@@ -101,7 +101,10 @@ def _smart_convertor(value):
                 return cache.client._serializer.loads(value)
             except:
                 pass
-    return smart_text(value)
+    try:
+        return smart_text(value)
+    except:
+        return value
 
 
 VALUE_GETTERS = {
