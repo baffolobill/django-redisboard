@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
+from django.utils.encoding import smart_text
 from django.utils.functional import curry
 from redis.exceptions import ResponseError
 
@@ -92,7 +93,7 @@ def _get_key_info(conn, key):
 VALUE_GETTERS = {
     b'list': lambda conn, key, start=0, end=-1: [(pos + start, val)
                                                  for (pos, val) in enumerate(conn.lrange(key, start, end))],
-    b'string': lambda conn, key, *args: [('string', conn.get(key))],
+    b'string': lambda conn, key, *args: [('string', smart_text(conn.get(key)))],
     b'set': lambda conn, key, *args: list(enumerate(conn.smembers(key))),
     b'zset': lambda conn, key, start=0, end=-1: [(pos + start, val)
                                                  for (pos, val) in enumerate(conn.zrange(key, start, end))],
