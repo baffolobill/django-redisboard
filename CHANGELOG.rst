@@ -2,7 +2,14 @@
 Changelog
 ============
 
+3.0.4 (2018-07-28)
+------------------
+
+* Removed missing files from MANIFEST.in (couldn't build under python-alpine)
+
 3.0.3 (2017-11-14)
+------------------
+
 * Fixed typo in inspect.html template to reflect `out`.
 
 3.0.2 (2017-01-19)

@@ -1,14 +1,12 @@
-graft docs
-graft examples
-graft src
 graft ci
+graft docs
+graft src
 graft tests
 
 include .bumpversion.cfg
-include .coveragerc
 include .cookiecutterrc
+include .coveragerc
 include .editorconfig
-include .isort.cfg
 
 include AUTHORS.rst
 include CHANGELOG.rst
@@ -16,6 +14,6 @@ include CONTRIBUTING.rst
 include LICENSE
 include README.rst
 
-include tox.ini .travis.yml appveyor.yml run_redisboard.py
+include tox.ini .travis.yml run_redisboard.py
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib
