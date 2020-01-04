@@ -2,6 +2,10 @@
 Changelog
 ============
 
+4.0.3 (2020-01-05)
+
+* Added fallback of ``django.utils.functional.curry()`` to ``functools.partialmethod`` for Django3 compatibility.
+
 4.0.2 (2020-01-05)
 
 * Import OrderedDict from python stdlib "collections" without fallback.

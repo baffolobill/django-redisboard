@@ -6,7 +6,10 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from django.utils.encoding import smart_text
-from django.utils.functional import curry
+try:
+    from django.utils.functional import curry
+except ImportError:
+    from functools import partialmethod as curry
 from redis.exceptions import ResponseError
 
 from .utils import PY3
