@@ -45,9 +45,9 @@ Overview
     :alt: PyPI Package latest release
     :target: https://pypi.python.org/pypi/django-redisboard
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/ionelmc/django-redisboard/v4.0.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/ionelmc/django-redisboard/v4.0.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/ionelmc/django-redisboard/compare/v4.0.0...master
+    :target: https://github.com/ionelmc/django-redisboard/compare/v4.0.1...master
 
 .. |wheel| image:: https://img.shields.io/pypi/wheel/django-redisboard.svg
     :alt: PyPI Wheel
