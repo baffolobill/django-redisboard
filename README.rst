@@ -12,13 +12,14 @@ Overview
     * - tests
       - | |travis| |appveyor| |requires|
         | |coveralls| |codecov|
-        | |landscape| |scrutinizer| |codacy| |codeclimate|
     * - package
-      - |version| |downloads| |wheel| |supported-versions| |supported-implementations|
+      - | |version| |wheel| |supported-versions| |supported-implementations|
+        | |commits-since|
 
 .. |docs| image:: https://readthedocs.org/projects/django-redisboard/badge/?style=flat
     :target: https://readthedocs.org/projects/django-redisboard
     :alt: Documentation Status
+
 
 .. |travis| image:: https://travis-ci.org/ionelmc/django-redisboard.svg?branch=master
     :alt: Travis-CI Build Status
@@ -40,48 +41,32 @@ Overview
     :alt: Coverage Status
     :target: https://codecov.io/github/ionelmc/django-redisboard
 
-.. |landscape| image:: https://landscape.io/github/ionelmc/django-redisboard/master/landscape.svg?style=flat
-    :target: https://landscape.io/github/ionelmc/django-redisboard/master
-    :alt: Code Quality Status
-
-.. |codacy| image:: https://img.shields.io/codacy/REPLACE_WITH_PROJECT_ID.svg?style=flat
-    :target: https://www.codacy.com/app/ionelmc/django-redisboard
-    :alt: Codacy Code Quality Status
-
-.. |codeclimate| image:: https://codeclimate.com/github/ionelmc/django-redisboard/badges/gpa.svg
-   :target: https://codeclimate.com/github/ionelmc/django-redisboard
-   :alt: CodeClimate Quality Status
-
-.. |version| image:: https://img.shields.io/pypi/v/django-redisboard.svg?style=flat
+.. |version| image:: https://img.shields.io/pypi/v/django-redisboard.svg
     :alt: PyPI Package latest release
     :target: https://pypi.python.org/pypi/django-redisboard
 
-.. |downloads| image:: https://img.shields.io/pypi/dm/django-redisboard.svg?style=flat
-    :alt: PyPI Package monthly downloads
-    :target: https://pypi.python.org/pypi/django-redisboard
+.. |commits-since| image:: https://img.shields.io/github/commits-since/ionelmc/django-redisboard/v4.0.0.svg
+    :alt: Commits since latest release
+    :target: https://github.com/ionelmc/django-redisboard/compare/v4.0.0...master
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/django-redisboard.svg?style=flat
+.. |wheel| image:: https://img.shields.io/pypi/wheel/django-redisboard.svg
     :alt: PyPI Wheel
     :target: https://pypi.python.org/pypi/django-redisboard
 
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/django-redisboard.svg?style=flat
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/django-redisboard.svg
     :alt: Supported versions
     :target: https://pypi.python.org/pypi/django-redisboard
 
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/django-redisboard.svg?style=flat
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/django-redisboard.svg
     :alt: Supported implementations
     :target: https://pypi.python.org/pypi/django-redisboard
-
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/g/ionelmc/django-redisboard/master.svg?style=flat
-    :alt: Scrutinizer Status
-    :target: https://scrutinizer-ci.com/g/ionelmc/django-redisboard/
 
 
 .. end-badges
 
 Redis monitoring and inspection drop-in application using django admin.
 
-* Free software: BSD license
+* Free software: BSD 2-Clause License
 
 Features
 ========
@@ -98,22 +83,21 @@ Requirements
 :Services: Redis 2.2 or later.
 :Packages: Django>=1.8, py-redis>=2.10.0
 
-Don't have a django project ?
-=============================
+Don't have a django project?
+============================
 
-Use the quick start script ! It will create and run a django project on 0.0.0.0:8000 with just the redisboard installed.
+If you just want to run redisboard quickly do this::
 
-With curl::
+    pip install django-redisboard
+    redisboard
 
-    curl -L https://raw.github.com/ionelmc/django-redisboard/master/run_redisboard.py | tee run_redisboard.py | sh -e
+Don't want to run on 0.0.0.0:8000? Run::
 
-With wget::
+    redisboard ip:port
 
-    wget --no-check-certificate https://raw.github.com/ionelmc/django-redisboard/master/run_redisboard.py -O - | tee run_redisboard.py | sh -e
+Want a password that ain't random (you might need to ``rm -rf ~/.redisboard`` first tho)? Run::
 
-Don't want to run on 0.0.0.0:8000 ? Run::
-
-    ./run_redisboard.py ip:port
+    redisboard --password=foobar
 
 Installation guide
 ==================
@@ -134,11 +118,7 @@ Add ``redisboard`` to ``INSTALLED_APPS``:
 
 After that you need to run::
 
-    manage.py syncdb
-
-Or if you use south you can migrate this app::
-
-    manage.py migrate redisboard
+    manage.py migrate
 
 Then you can add redis servers in the admin. You will see the stats in the changelist.
 

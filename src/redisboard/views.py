@@ -14,7 +14,7 @@ from .utils import LazySlicingIterable
 try:
     from django.utils.datastructures import SortedDict as OrderedDict
 except ImportError:
-    from django.utils.datastructures import OrderedDict
+    from collections import OrderedDict
 
 
 logger = getLogger(__name__)
@@ -43,6 +43,13 @@ LENGTH_GETTERS = {
 }
 
 
+def _decode_bytes(value):
+    if isinstance(value, bytes):
+        return value.decode('utf8')
+    else:
+        return value
+
+
 def _get_key_info(conn, key):
     try:
         obj_type = conn.type(key)
@@ -68,12 +75,12 @@ def _get_key_info(conn, key):
                 'idletime': "n/a",
             }
         return {
-            'type': obj_type,
+            'type': _decode_bytes(obj_type),
             'name': key,
             'length': obj_length,
             'ttl': obj_ttl,
             'refcount': refcount,
-            'encoding': encoding,
+            'encoding': _decode_bytes(encoding),
             'idletime': idletime,
         }
     except ResponseError as exc:
@@ -90,32 +97,19 @@ def _get_key_info(conn, key):
         }
 
 
-def _smart_convertor(value):
-    if isinstance(value, bytes):
-        from django.core.cache import cache
-        # I use only django_redis backend. All caches have
-        # the same settings. So that I can skip any kind of 
-        # validation.
-        if hasattr(cache, 'client') and hasattr(cache.client, '_serializer'):
-            try:
-                return cache.client._serializer.loads(value)
-            except:
-                pass
-    try:
-        return smart_text(value)
-    except:
-        return value
-
-
 VALUE_GETTERS = {
-    b'list': lambda conn, key, start=0, end=-1: [(pos + start, val)
-                                                 for (pos, val) in enumerate(conn.lrange(key, start, end))],
-    b'string': lambda conn, key, *args: [('string', _smart_convertor(conn.get(key)))],
-    b'set': lambda conn, key, *args: list(enumerate(conn.smembers(key))),
-    b'zset': lambda conn, key, start=0, end=-1: [(pos + start, val)
-                                                 for (pos, val) in enumerate(conn.zrange(key, start, end))],
-    b'hash': lambda conn, key, *args: conn.hgetall(key).items(),
-    b'n/a': lambda conn, key, *args: (),
+    'list': lambda conn, key, start=0, end=-1: [
+        (pos + start, val)
+        for (pos, val) in enumerate(conn.lrange(key, start, end))
+    ],
+    'string': lambda conn, key, *args: [('string', conn.get(key))],
+    'set': lambda conn, key, *args: list(enumerate(conn.smembers(key))),
+    'zset': lambda conn, key, start=0, end=-1: [
+        (pos + start, val)
+        for (pos, val) in enumerate(conn.zrange(key, start, end))
+    ],
+    'hash': lambda conn, key, *args: conn.hgetall(key).items(),
+    'n/a': lambda conn, key, *args: (),
 }
 
 
@@ -135,6 +129,7 @@ def _get_key_details(conn, db, key, page):
         details['data'] = VALUE_GETTERS[details['type']](conn, key)
 
     return details
+
 
 def _raw_get_db_summary(server, db):
     server.connection.execute_command('SELECT', db)
@@ -197,6 +192,7 @@ def _raw_get_db_summary(server, db):
         persistent_memory=persistent_memory,
     )
 
+
 def _get_db_summary(server, db):
     try:
         return _raw_get_db_summary(server, db)
@@ -219,7 +215,7 @@ def _get_db_details(server, db):
     if size > server.sampling_threshold:
         sampling = True
         pipe = conn.pipeline()
-        for _ in (range if PY3 else xrange)(server.sampling_size):  # flake8=noqa
+        for _ in (range if PY3 else xrange)(server.sampling_size):  # noqa
             pipe.randomkey()
 
         for key in set(pipe.execute()):
