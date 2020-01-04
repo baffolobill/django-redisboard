@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 from datetime import datetime
 from datetime import timedelta
 
@@ -13,10 +14,6 @@ from django.utils.translation import ugettext_lazy as _
 from .utils import PY3
 from .utils import cached_property
 
-try:
-    from django.utils.datastructures import SortedDict as OrderedDict
-except ImportError:
-    from django.utils.datastructures import OrderedDict
 
 REDISBOARD_DETAIL_FILTERS = [re.compile(name) for name in getattr(settings, 'REDISBOARD_DETAIL_FILTERS', (
     'aof_enabled', 'bgrewriteaof_in_progress', 'bgsave_in_progress',

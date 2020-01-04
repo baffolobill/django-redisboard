@@ -2,6 +2,10 @@
 Changelog
 ============
 
+4.0.2 (2020-01-05)
+
+* Import OrderedDict from python stdlib "collections" without fallback.
+
 4.0.1 (2020-01-05)
 
 * Import OrderedDict from collections.

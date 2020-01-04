@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from logging import getLogger
 
 from django.conf import settings
@@ -10,11 +11,6 @@ from redis.exceptions import ResponseError
 
 from .utils import PY3
 from .utils import LazySlicingIterable
-
-try:
-    from django.utils.datastructures import SortedDict as OrderedDict
-except ImportError:
-    from collections import OrderedDict
 
 
 logger = getLogger(__name__)
