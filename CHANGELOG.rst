@@ -2,6 +2,10 @@
 Changelog
 ============
 
+4.0.1 (2020-01-05)
+
+* Import OrderedDict from collections.
+
 4.0.0 (2018-11-01)
 ------------------
 
